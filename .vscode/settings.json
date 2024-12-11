@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "ga_ks.h": "c",
+        "string.h": "c"
+    }
+}
