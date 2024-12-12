@@ -49,40 +49,24 @@ int main(){
         printf("Invalid input mode\n");
         return 1;
     }
-    int algorithmSelector; // 1 ga, 2,dp, 3.greedy, 4.iterative
+    int algorithmSelector = 1; // 1 ga, 2,dp, 3.greedy, 4.iterative
 
-    printf("Choose the algorithm to solve the knapsack problem:\n 1. Genetic Algorithm\n 2. Iterative Improvement Algorithm\n 3. Greedy Algorithm\n 4. Dynamic Programming Algorithm\n");
+    printf("Choose the algorithm to solve the knapsack problem:\n 1. Genetic Algorithm\n 2. Greedy Algorithm\n 3. Dynamic Programming Algorithm\n");
     printf("Enter your choice: ");
-    scanf("%d", &algorithmSelector);
+    // scanf("%d", &algorithmSelector);
     AnswerStruct answer;
     if(algorithmSelector == 1){
         printf("====================================================================\n");
         printf("Running Genetic Algorithm\n");
         answer = run_ga(weights, values, capacity, n, frequency);
-        // printf("====================================================================\n");
-        // // printf("The maximum value that can be obtained is: %d\n", answer_ga);
-        // return 0;
     }else if(algorithmSelector == 2){
-        printf("====================================================================\n");
-        printf("Running Iterative Improvement Algorithm\n");
-        answer = run_iterative(weights, values, capacity, n, frequency);
-        // printf("====================================================================\n");
-        // printf("The maximum value that can be obtained is: %d\n", answer_iterative);
-        // return 0;
-    }else if(algorithmSelector == 3){
         printf("====================================================================\n");
         printf("Running Greedy Algorithm\n");
         answer = run_greedy(weights, values, capacity, n, frequency);
-        // printf("====================================================================\n");
-        // printf("The maximum value that can be obtained is: %d\n", answer_greedy);
-        // return 0;
-    }else if(algorithmSelector == 4){
+    }else if(algorithmSelector == 3){
         printf("====================================================================\n");
         printf("Running Dynamic Programming Algorithm\n");
         answer = run_dynamic(weights, values, capacity, n, frequency);
-        // printf("====================================================================\n");
-        // printf("The maximum value that can be obtained is: %d\n", answer_dynamic);
-        // return 0;
     }
     if(answer.iserror == 1){
         printf("====================================================================\n");
@@ -91,19 +75,20 @@ int main(){
         return -1;
     }
     printf("====================================================================\n");
-    printf(" %s Result.\n ", algorithmSelector == 1 ? "Genetic Algorithm" : algorithmSelector == 2 ? "Iterative Improvement" : algorithmSelector == 3 ? "Greedy" : "Dynamic Programming");
+    printf(" %s Result.\n", algorithmSelector == 1 ? "Genetic Algorithm" : algorithmSelector == 2 ? "Greedy" : "Dynamic Programming");
     printf("  The maximum value that can be obtained is: %d\n", answer.answer_costs);
     printf("  The time taken to run the algorithm is: %f seconds\n", answer.running_time);
     if(algorithmSelector == 1){
         printf("  The generation where the algorithm stopped is: %d\n", answer.answer_generation_stop);
         printf("  The chromosome that gives the maximum value is: ");
-        int print_chromosome = (n > 200) ? 15 : 7;
         int dot_print = 0;
+        int totalChromosome = answer.testcases_n;
+        int print_chromosome = (totalChromosome > 200) ? 15 : 7;
         for(int i = 0; i < print_chromosome; i++){
             printf("%d", answer.answer_chromosome[i]);
         }
         printf("...");
-        for(int i = n - print_chromosome; i < n; i++){
+        for(int i = totalChromosome - print_chromosome; i < n; i++){
          
            printf("%d", answer.answer_chromosome[i]);
         }
