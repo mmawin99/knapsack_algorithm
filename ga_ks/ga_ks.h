@@ -13,7 +13,7 @@ typedef struct {
     int fitness;
     int total_weight;
 } chromosomes;
-int run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency);
+AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency);
 void merge(chromosomes* pop, int left, int mid, int right);
 void merge_sort(chromosomes* pop, int left, int right);
 void sort_population(chromosomes* pop, int pop_size);

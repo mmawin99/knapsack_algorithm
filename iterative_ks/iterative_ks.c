@@ -96,13 +96,7 @@ void iterativeImprovement(int weights[], int values[], int solution[], int n, in
 }
 
 // Main function
-int run_iterative(int *weights, int *values, int capacity, int n, LARGE_INTEGER frequency) {
-    // int n, capacity;
-
-    // Input the number of items
-    // printf("Enter the number of items: ");
-    // scanf("%d", &n);
-
+AnswerStruct run_iterative(int *weights, int *values, int capacity, int n, LARGE_INTEGER frequency) {
     int solution[n];
 	
 	long long start_time = get_time();
@@ -114,11 +108,20 @@ int run_iterative(int *weights, int *values, int capacity, int n, LARGE_INTEGER 
 	long long end_time = get_time();
 	// double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC; 
 	double time_taken = convert_to_seconds(start_time, end_time, frequency.QuadPart);
-    printf("Time Used: %.10f\n",time_taken);
+    // printf("Time Used: %.10f\n",time_taken);
 	
     int totalValue = calculateValue(values, solution, n);
-    printf("Total value: %d\n", totalValue);
-    printf("Total weight: %d\n", calculateWeight(weights, solution, n));
+    int totalWeight = calculateWeight(weights, solution, n);
+    // printf("Total value: %d\n", totalValue);
+    // printf("Total weight: %d\n", totalWeight);
 
-    return totalValue;
+    AnswerStruct answer;
+    answer.running_time = time_taken;
+    answer.answer_costs = totalValue;
+    answer.testcases_weight = weights;
+    answer.testcases_values = values;
+    answer.testcases_capacity = capacity;
+    answer.testcases_n = n;
+    answer.iserror = 0;
+    return answer;
 }

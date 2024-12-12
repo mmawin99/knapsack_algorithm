@@ -171,7 +171,6 @@ chromosomes* tournament_selection(chromosomes* pop, int pop_size, int n, int max
         int mutation_rate = get_generation(generation);
         if ((rand() % 100 < mutation_rate) && (index + 1 < pop_size)) {
             int* mutated_child = mutate(child, n);
-//            mutated_child = validate_chromosome(mutated_child, n, max_weight, items);
 
             new_population[index + 1].chromosome = mutated_child;
             cal_fitness(mutated_child, n, max_weight, items, &new_population[index + 1]);
@@ -213,7 +212,7 @@ item* initialItem(int n, int *weight, int *cost) {
 }
 
 
-int run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency){
+AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency){
     long long start_time = get_time();
     int pop_size = MAX_POPULATION;
     item* items = (item*) malloc(n * sizeof(item)); 
@@ -229,7 +228,16 @@ int run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency)
     if (items == NULL) {
         printf("Error: Items initialization failed.\n");
         printf("Terminated Genetic Algorithm: Knapsack Solver(run_ga).\n");
-        return -1;
+        AnswerStruct answer;
+        answer.running_time = 0;
+        answer.answer_chromosome = NULL;
+        answer.answer_costs = 0;
+        answer.testcases_weight = weight;
+        answer.testcases_values = cost;
+        answer.testcases_capacity = capacity;
+        answer.testcases_n = n;
+        answer.iserror = 1;
+        return answer;
     }
     chromosomes* population = initial_pop(pop_size, n, capacity, items);
     printf("Initial population success....\n");
@@ -251,7 +259,7 @@ int run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency)
             no_change_count = 0;
         }
         if (no_change_count >= STOP_CONDITION_FITNESS_STAGNATED) {
-            printf("Stopping as fitness stagnated for %d generations.\n", STOP_CONDITION_FITNESS_STAGNATED);
+            printf("[Stopping] Fitness stagnated for %d generations.\n", STOP_CONDITION_FITNESS_STAGNATED);
             break;
         }
 		
@@ -259,8 +267,9 @@ int run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency)
         end_time = get_time();
 
 	    time_taken = convert_to_seconds(start_time, end_time, frequency.QuadPart);
-		printf("[%.5f sec]#%5d Generation [Dup: #%4d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
-		free_pop(population, pop_size);
+		// printf("[%.5f sec]#%5d Generation [Dup: #%4d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
+		printf("[%.3fsec][GEN #%d][Dup: #%4d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
+        free_pop(population, pop_size);
         population = new_population;
 		
         generation++;
@@ -268,9 +277,27 @@ int run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER frequency)
 	end_time = get_time();
 
     time_taken = convert_to_seconds(start_time, end_time, frequency.QuadPart);
-    printf("Optimal solution found with fitness %d in generation %d.\n", max_fitness, generation);
-    print_population(population, 2, n);
-	printf("Time used: %.10f seconds.\n", time_taken);
+    // printf("Optimal solution found with fitness %d in generation %d.\n", max_fitness, generation);
+    // print_population(population, 2, n);
+	// printf("Time used: %.10f seconds.\n", time_taken);
+    AnswerStruct answer;
+    answer.running_time = time_taken;
+    answer.answer_chromosome = (int*)malloc(n * sizeof(int));
+    answer.testcases_weight = (int *)malloc(n * sizeof(int));
+    answer.testcases_values = (int *)malloc(n * sizeof(int));
+    // printf("====================================================================\n");
+    for (int i = 0; i < n; i++) {
+        // printf("[%d] %d\n", i, population[0].chromosome[i]);
+        answer.answer_chromosome[i] = population[0].chromosome[i];
+        answer.testcases_weight[i] = weight[i];
+        answer.testcases_values[i] = cost[i];
+    }
+    // printf("====================================================================\n");
+    answer.answer_generation_stop = generation;
+    answer.answer_costs = max_fitness;
+    answer.testcases_capacity = capacity;
+    answer.testcases_n = n;
+    answer.iserror = 0;
     free_pop(population, pop_size);
-    return max_fitness;
+    return answer;
 }
