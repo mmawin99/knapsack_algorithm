@@ -116,7 +116,7 @@ int* multi_point_crossover(int* chromosome1, int* chromosome2, int n, int num_po
 }
 
 int* crossover(int* chromosome1, int* chromosome2, int n) {
-    return multi_point_crossover(chromosome1, chromosome2, n, rand() % (int)(n/1.14));
+    return multi_point_crossover(chromosome1, chromosome2, n, rand() % (int)(n/1.12));
 }
 
 int* mutate(int* chromosome, int n) {
@@ -268,7 +268,7 @@ AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER f
 
 	    time_taken = convert_to_seconds(start_time, end_time, frequency.QuadPart);
 		// printf("[%.5f sec]#%5d Generation [Dup: #%4d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
-		printf("[%.3fsec][GEN #%d][Dup: #%4d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
+		printf("[%06.3fsec][GEN #%05d][Dup: #%05d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
         free_pop(population, pop_size);
         population = new_population;
 		
@@ -285,14 +285,11 @@ AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER f
     answer.answer_chromosome = (int*)malloc(n * sizeof(int));
     answer.testcases_weight = (int *)malloc(n * sizeof(int));
     answer.testcases_values = (int *)malloc(n * sizeof(int));
-    // printf("====================================================================\n");
     for (int i = 0; i < n; i++) {
-        // printf("[%d] %d\n", i, population[0].chromosome[i]);
         answer.answer_chromosome[i] = population[0].chromosome[i];
         answer.testcases_weight[i] = weight[i];
         answer.testcases_values[i] = cost[i];
     }
-    // printf("====================================================================\n");
     answer.answer_generation_stop = generation;
     answer.answer_costs = max_fitness;
     answer.testcases_capacity = capacity;
