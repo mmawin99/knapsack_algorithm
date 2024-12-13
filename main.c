@@ -49,11 +49,12 @@ int main(){
         printf("Invalid input mode\n");
         return 1;
     }
-    int algorithmSelector = 1; // 1 ga, 2,dp, 3.greedy, 4.iterative
+    // int algorithmSelector = 1; // fix for ga
+    int algorithmSelector; // 1 ga, 2,dp, 3.greedy, 4.iterative
 
     printf("Choose the algorithm to solve the knapsack problem:\n 1. Genetic Algorithm\n 2. Greedy Algorithm\n 3. Dynamic Programming Algorithm\n");
     printf("Enter your choice: ");
-    // scanf("%d", &algorithmSelector);
+    scanf("%d", &algorithmSelector);
     AnswerStruct answer;
     if(algorithmSelector == 1){
         printf("====================================================================\n");
@@ -70,7 +71,7 @@ int main(){
     }
     if(answer.iserror == 1){
         printf("====================================================================\n");
-        printf("Error in running the algorithm\n");
+        printf("Error on running the algorithm\n");
         printf("====================================================================\n");
         return -1;
     }

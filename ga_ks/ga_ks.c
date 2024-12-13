@@ -116,7 +116,7 @@ int* multi_point_crossover(int* chromosome1, int* chromosome2, int n, int num_po
 }
 
 int* crossover(int* chromosome1, int* chromosome2, int n) {
-    return multi_point_crossover(chromosome1, chromosome2, n, rand() % (int)(n/1.12));
+    return multi_point_crossover(chromosome1, chromosome2, n, rand() % (int)(n/1));
 }
 
 int* mutate(int* chromosome, int n) {
@@ -271,7 +271,7 @@ AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER f
 		printf("[%06.3fsec][GEN #%05d][Dup: #%05d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
         free_pop(population, pop_size);
         population = new_population;
-		
+
         generation++;
     }
 	end_time = get_time();
