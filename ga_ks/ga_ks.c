@@ -1,5 +1,4 @@
 #include <ga_ks.h>
-
 void merge(chromosomes* pop, int left, int mid, int right) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
@@ -130,12 +129,15 @@ int* mutate(int* chromosome, int n) {
 }
 
 int get_generation(int generation){
-	if(generation < 10000) return 50;
-	else if(generation < 20000) return 30;
+	if(generation < 200) return 75;
+	else if(generation < 400) return 30;
 	else return 10;
 }
+int adaptive_mutation_rate(int stagnation, int base_rate) {
+    return base_rate + (stagnation / 10);
+}
 
-chromosomes* tournament_selection(chromosomes* pop, int pop_size, int n, int max_weight, item* items, int generation) {
+chromosomes* tournament_selection(chromosomes* pop, int pop_size, int n, int max_weight, item* items, int generation, int stagnation) {
     chromosomes* new_population = (chromosomes*)malloc(pop_size * sizeof(chromosomes));
     if (new_population == NULL) {
         printf("Memory allocation failed for new population.\n");
@@ -168,13 +170,11 @@ chromosomes* tournament_selection(chromosomes* pop, int pop_size, int n, int max
         new_population[index].chromosome = child;
         cal_fitness(child, n, max_weight, items, &new_population[index]);
 
-        int mutation_rate = get_generation(generation);
+        int mutation_rate = adaptive_mutation_rate(stagnation, get_generation(generation));
         if ((rand() % 100 < mutation_rate) && (index + 1 < pop_size)) {
             int* mutated_child = mutate(child, n);
-
             new_population[index + 1].chromosome = mutated_child;
             cal_fitness(mutated_child, n, max_weight, items, &new_population[index + 1]);
-
             index++;
         }
 
@@ -263,11 +263,10 @@ AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER f
             break;
         }
 		
-        chromosomes* new_population = tournament_selection(population, pop_size, n, capacity, items, generation);
+        chromosomes* new_population = tournament_selection(population, pop_size, n, capacity, items, generation, no_change_count);
         end_time = get_time();
 
 	    time_taken = convert_to_seconds(start_time, end_time, frequency.QuadPart);
-		// printf("[%.5f sec]#%5d Generation [Dup: #%4d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
 		printf("[%06.3fsec][GEN #%05d][Dup: #%05d] Fitness: %6d, Weight: %6d\n",time_taken, generation, no_change_count, population[0].fitness, population[0].total_weight);
         free_pop(population, pop_size);
         population = new_population;
@@ -277,9 +276,6 @@ AnswerStruct run_ga(int *weight, int *cost, int capacity, int n, LARGE_INTEGER f
 	end_time = get_time();
 
     time_taken = convert_to_seconds(start_time, end_time, frequency.QuadPart);
-    // printf("Optimal solution found with fitness %d in generation %d.\n", max_fitness, generation);
-    // print_population(population, 2, n);
-	// printf("Time used: %.10f seconds.\n", time_taken);
     AnswerStruct answer;
     answer.running_time = time_taken;
     answer.answer_chromosome = (int*)malloc(n * sizeof(int));
