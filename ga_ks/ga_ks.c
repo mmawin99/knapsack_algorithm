@@ -129,9 +129,9 @@ int* mutate(int* chromosome, int n) {
 }
 
 int get_generation(int generation){
-	if(generation < 200) return 75;
-	else if(generation < 400) return 30;
-	else return 10;
+	if(generation < 200) return 100;
+	else if(generation < 400) return 75;
+	else return 25;
 }
 int adaptive_mutation_rate(int stagnation, int base_rate) {
     return base_rate + (stagnation / 10);

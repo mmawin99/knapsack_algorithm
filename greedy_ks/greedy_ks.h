@@ -1,5 +1,4 @@
-#include <../main_all.h>
-
+#include <../main.h>
 typedef struct {
     int weight;
     int value;

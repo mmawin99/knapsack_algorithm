@@ -1,4 +1,4 @@
-#include <main_all.h>
+#include <main.h>
 
 long long get_time(){
     LARGE_INTEGER time;

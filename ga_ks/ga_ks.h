@@ -1,4 +1,4 @@
-#include <../main_all.h>
+#include <../main.h>
 #define MAX_POPULATION 4000
 #define MAX_GENERATION 5000
 #define STOP_CONDITION_FITNESS_STAGNATED 200

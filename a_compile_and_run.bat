@@ -7,7 +7,7 @@ set OUTPUT=ks.exe
 REM Collect main.c and files from subfolders
 setlocal enabledelayedexpansion
 set SOURCES=main.c
-set SOURCES=!SOURCES! main_all.c
+set SOURCES=!SOURCES! timer.c
 
 REM Add all .c files from the subdirectories
 for /D %%d in (ga_ks greedy_ks dynamic_ks bruteforce_ks) do (

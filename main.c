@@ -1,4 +1,8 @@
 #include <main.h>
+#include <ga_ks/ga_ks.h>
+#include <greedy_ks/greedy_ks.h>
+#include <dynamic_ks/dynamic_ks.h>
+
 int main(){
     int input_mode; // 1 for manual input, 2 for file input
     int error = 0;
